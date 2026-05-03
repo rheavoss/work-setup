@@ -1,3 +1,10 @@
+## ⛔ ANTIGRAVITY — ZERO WRITE ACCESS TO THIS FILE
+> **Rule:** Antigravity CANNOT edit CLAUDE.md or any file in 90_protocols/, 99_grok_brain/, or infrastructure configs. Ever.
+> **Suggestion format:** Write ANTIGRAVITY_SUGGESTION block in your own chat only. Claude reviews → CEO approves → Claude edits.
+> **Enforcement:** Any direct edit = logged in antigravity_failure_log.md + reverted immediately.
+
+---
+
 # Work Setup — AI Infrastructure Command Center
 > Last updated: 2026-04-30 | This is Suraj's infrastructure workspace
 
