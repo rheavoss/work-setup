@@ -3,12 +3,11 @@
 
 ## Waiting on Grok
 
-| # | Task | Blocked by | Created |
-|---|---|---|---|
-| 1 | FAANG-level failure prevention architecture | Grok response to `3AI_COMMUNICATION_PROTOCOL.md` (Desktop) — 7 questions inside | 2026-05-12 |
-| 2 | Supabase async comms bus (reduce 5-step CEO bridge) | Same Grok response — Q4 in protocol doc | 2026-05-12 |
+| # | Task | Blocked by |
+|---|---|---|
+| 1 | Pre-mortem green flag on full infrastructure | Grok response to GROK_OUTBOX.md |
 
-**When Grok responds:** Paste to Claude for QA (AGREE/DISAGREE per point) before anything touches disk.
+**When Grok responds:** Paste to Claude for QA. If green flag → close project.
 
 ---
 
@@ -16,8 +15,7 @@
 
 | # | Task | Notes |
 |---|---|---|
-| 1 | Point Obsidian at vault | Open Obsidian → "Open folder as vault" → `~/Master-Knowledge-Vault` |
-| 2 | Share `3AI_COMMUNICATION_PROTOCOL.md` with Grok | File is on Desktop. Paste + ask for FAANG redesign answers to 7 questions. |
+| 1 | Obsidian vault | Done — Master-Knowledge-Vault open ✅ |
 
 ---
 
@@ -34,15 +32,20 @@
 
 ## Completed (2026-05-12 Session)
 
-| # | Task | Status |
-|---|---|---|
-| 1 | failure-oracle HTTP server (`~/.claude/mcp/failure-oracle/server.ts`, port 3133) | Done |
-| 2 | failure-oracle SessionStart hook (`start-failure-oracle.sh`) | Done |
-| 3 | failure-oracle UserPromptSubmit inject hook (`failure-oracle-inject.py`) | Done |
-| 4 | Repeat-detection hook (`repeat-detection.py`) — Jaccard trigram, 60% threshold | Done |
-| 5 | Supabase `failure_patterns` table + GIN index on keywords | Done |
-| 6 | All 17 failure patterns seeded into Supabase (P01–P17, normalized) | Done |
-| 7 | `3AI_COMMUNICATION_PROTOCOL.md` written to Desktop | Done |
-| 8 | `~/Master-Knowledge-Vault/` directory structure (16 dirs, PAI-aligned) | Done |
-| 9 | `~/Master-Knowledge-Vault/CLAUDE.md` with PAI Algorithm v6.3.0 VERIFY gate | Done |
-| 10 | G.Brain `concepts/claude-failure-patterns` updated with all 17 patterns | Done |
+| # | Task |
+|---|---|
+| 1 | failure-oracle HTTP server (port 3133) |
+| 2 | start-failure-oracle.sh (SessionStart hook) |
+| 3 | failure-oracle-inject.py (UserPromptSubmit hook) + inference gate |
+| 4 | repeat-detection.py (Jaccard trigram 60%) |
+| 5 | Supabase failure_patterns table + GIN index |
+| 6 | All 17 patterns seeded P01–P17 |
+| 7 | 3AI_COMMUNICATION_PROTOCOL.md on Desktop |
+| 8 | Master-Knowledge-Vault 16-dir PAI structure |
+| 9 | Master-Knowledge-Vault/CLAUDE.md (VERIFY gate, correct tier names) |
+| 10 | G.Brain concepts/claude-failure-patterns updated |
+| 11 | 4 Supabase comms tables (master_grok_brain, antigravity_outbox, grok_inbox, grok_outbox) |
+| 12 | update-master-grok-brain.ts + sync-antigravity-outbox.ts written |
+| 13 | Both scripts wired to gbrain-post-stop.sh (Stop hook) |
+| 14 | pre-mortem skill installed globally (~/.claude/commands/pre-mortem.md) |
+| 15 | rheavoss/work-setup repo — public, all files live |
