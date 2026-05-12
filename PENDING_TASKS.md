@@ -1,15 +1,9 @@
 # Work Setup — Pending Tasks
 > Last updated: 2026-05-12
 
-## 🔴 OPEN — Waiting on Grok
+## ✅ ALL CLEAR — Grok Green Flag (2026-05-13)
 
-| # | Task | Blocked by |
-|---|---|---|
-| 1 | Pattern #1 inference gate — hard block before any Vast.ai/ComfyUI/RunPod Bash execution unless `.gates/GROK_INBOX_READ.md` exists | Grok gate required before writing hook |
-
-**Context:** Grok pre-mortem certified Tigers 1/2/6 fixed. Scope was infrastructure reliability only. Pattern #1 at the inference layer was never in scope and remains open. 20 failures in May 5–8 week, root cause: no hard gate before inference sessions start.
-
----
+No open items. Infrastructure fully certified.
 
 ## ✅ Infrastructure Baseline — Grok Green Flag (2026-05-12)
 
@@ -65,3 +59,5 @@
 | 17 | Tiger 1 fix — failure-oracle-inject.py hard warning on server down |
 | 18 | Tiger 2 fix — gbrain-post-stop.sh Supabase scripts before git check |
 | 19 | Tiger 3 fix — .gbrain-project created in Instagram + BMN |
+| 20 | inference-grok-inbox-gate.sh — Pattern #1 hard block at PreToolUse Bash layer |
+| 21 | Grok certified gate (commit b6bd65e) — green flag issued 2026-05-13 |
