@@ -1,13 +1,17 @@
 # Work Setup — Pending Tasks
 > Last updated: 2026-05-12
 
-## Waiting on Grok
+## Status: 3 Tigers Fixed — Re-run Pre-Mortem for Green Flag
 
-| # | Task | Blocked by |
+Grok pre-mortem ran (2026-05-12). Found 3 Launch-Blocking Tigers. All fixed.
+
+| # | Tiger | Fix |
 |---|---|---|
-| 1 | Pre-mortem green flag on full infrastructure | Grok response to GROK_OUTBOX.md |
+| 1 | Port 3133 down — silent fail open | failure-oracle-inject.py now injects hard Pattern #15 warning on URLError |
+| 2 | gbrain-post-stop.sh early exit — Supabase never ran on clean sessions | Supabase scripts moved before git-dirty check |
+| 3 | .gbrain-project missing — basename garbage in master_grok_brain | Created .gbrain-project in Instagram + BMN (all 13 projects now covered) |
 
-**When Grok responds:** Paste to Claude for QA. If green flag → close project.
+**Next:** Re-run pre-mortem or declare green flag if fixes are sufficient.
 
 ---
 
@@ -49,3 +53,7 @@
 | 13 | Both scripts wired to gbrain-post-stop.sh (Stop hook) |
 | 14 | pre-mortem skill installed globally (~/.claude/commands/pre-mortem.md) |
 | 15 | rheavoss/work-setup repo — public, all files live |
+| 16 | Grok pre-mortem run — 3 Tigers found |
+| 17 | Tiger 1 fix — failure-oracle-inject.py hard warning on server down |
+| 18 | Tiger 2 fix — gbrain-post-stop.sh Supabase scripts before git check |
+| 19 | Tiger 3 fix — .gbrain-project created in Instagram + BMN |
