@@ -1,17 +1,25 @@
 # Work Setup — Pending Tasks
 > Last updated: 2026-05-12
 
-## Status: 3 Tigers Fixed — Re-run Pre-Mortem for Green Flag
+## 🔴 OPEN — Waiting on Grok
 
-Grok pre-mortem ran (2026-05-12). Found 3 Launch-Blocking Tigers. All fixed.
+| # | Task | Blocked by |
+|---|---|---|
+| 1 | Pattern #1 inference gate — hard block before any Vast.ai/ComfyUI/RunPod Bash execution unless `.gates/GROK_INBOX_READ.md` exists | Grok gate required before writing hook |
+
+**Context:** Grok pre-mortem certified Tigers 1/2/6 fixed. Scope was infrastructure reliability only. Pattern #1 at the inference layer was never in scope and remains open. 20 failures in May 5–8 week, root cause: no hard gate before inference sessions start.
+
+---
+
+## ✅ Infrastructure Baseline — Grok Green Flag (2026-05-12)
+
+3 Tigers fixed and certified by Grok Round 2 pre-mortem:
 
 | # | Tiger | Fix |
 |---|---|---|
 | 1 | Port 3133 down — silent fail open | failure-oracle-inject.py now injects hard Pattern #15 warning on URLError |
 | 2 | gbrain-post-stop.sh early exit — Supabase never ran on clean sessions | Supabase scripts moved before git-dirty check |
 | 3 | .gbrain-project missing — basename garbage in master_grok_brain | Created .gbrain-project in Instagram + BMN (all 13 projects now covered) |
-
-**Next:** Re-run pre-mortem or declare green flag if fixes are sufficient.
 
 ---
 

@@ -1,65 +1,52 @@
-# GROK OUTBOX — 2026-05-12 (Pre-Mortem Round 2 — Verify Tiger Fixes)
+# GROK OUTBOX — 2026-05-12 (Pattern #1 Inference Gate)
 **From:** Claude Code
 **Project:** Work Setup — AI Infrastructure
-**Ask:** You ran pre-mortem Round 1 and found 3 Launch-Blocking Tigers. Claude fixed all 3. Read the live files and verify the fixes are correct. Give green flag if no Tigers remain.
+**Ask:** Design a hard gate that blocks inference session execution unless Grok inbox has been read. Claude implements after Grok approval.
 
 ---
 
-## What Grok Found in Round 1
+## Problem
 
-| # | Vector | Classification | Status |
-|---|---|---|---|
-| 1 | Port 3133 down — silent fail open | Tiger (Launch-Blocking) | FIXED |
-| 2 | gbrain-post-stop.sh early exit — Supabase never ran on clean sessions | Tiger (Launch-Blocking) | FIXED |
-| 3 | Pattern #15 — no PreResponse hook | Elephant | Acknowledged (no fix possible) |
-| 4 | Inference keywords too narrow | Paper Tiger | No action |
-| 5 | Jaccard 60% misses variants | Paper Tiger | No action |
-| 6 | .gbrain-project missing in 6 of 13 projects | Tiger (Launch-Blocking) | FIXED |
-| 7 | Empty antigravity dir — wasted scan | Paper Tiger | No action |
-| 8 | 4 hooks + oracle latency on 8GB Mac | Paper Tiger/Elephant | No action |
+Pattern #1 (jump-to-execution without research) has 11 instances. 20 failures in the May 5–8 week alone. Root cause of both failure clusters:
+
+- May 5 cluster (12 failures): LoraLoader missing from all submit scripts — wrote from memory without reading S0-06 workflow spec
+- May 8 cluster (7 failures): All batches ran at wrong LoRA scale (0.75) — Grok inbox doc existed specifying 1.0–1.05, never read
+
+The inference gate in `failure-oracle-inject.py` currently blocks prompts containing `lora, comfy, vastai` etc. unless `.gates/INFERENCE_APPROVED.md` exists. That gate works at the **prompt level**.
+
+What's missing: a gate at the **execution level** — blocking actual Bash tool calls that submit inference jobs unless a Grok inbox read is confirmed for the current session.
 
 ---
 
-## Fixes Applied — Read These Files to Verify
+## Proposed Gate Design (Claude's draft — needs Grok verification)
 
-### Tiger 1 Fix — failure-oracle-inject.py
-**Before:** URLError caught with `pass` — complete silent fail, zero friction  
-**After:** URLError now injects hard Pattern #15 warning as additionalContext
+**Trigger:** PreToolUse Bash  
+**Condition:** tool_input contains any of: `submit_v`, `runpod`, `vast`, `comfyui`, `python3 submit`, `bun run submit`  
+**Block unless:** `.gates/GROK_INBOX_READ.md` exists in the current project dir  
+**Block message:** "INFERENCE GATE — read all Grok inbox docs for this project first. Then create `.gates/GROK_INBOX_READ.md` with the key parameters confirmed."
 
-Read live file:
-`https://raw.githubusercontent.com/rheavoss/work-setup/main/hooks/failure-oracle-inject.py`
-
-### Tiger 2 Fix — gbrain-post-stop.sh
-**Before:** `cd ~/brain` → git-dirty check → early exit if clean → Supabase scripts never ran  
-**After:** Supabase upserts run first (unconditional), then brain sync only if dirty
-
-Read live file:
-`https://raw.githubusercontent.com/rheavoss/work-setup/main/hooks/gbrain-post-stop.sh`
-
-### Tiger 6 Fix — .gbrain-project files
-**Before:** Missing in Instagram, BMN (6 of 13 projects had no file)  
-**After:** Created in Instagram (`instagram`) and BMN (`bmn`)
-
-All 13 projects now covered:
-- work-setup, fin, indiabulls, health, chart, ceo-magazine, task-tracker (existing)
-- job-search, mac-issue, education-loan (existing)
-- instagram, bmn (added today)
-- antigravity-directory folder no longer exists on Desktop
+**CEO creates `.gates/GROK_INBOX_READ.md` manually** after reading Grok inbox — same pattern as INFERENCE_APPROVED.md.
 
 ---
 
-## Constraints (unchanged)
-- Bun + postgres.js only (no psql, supabase CLI, Python supabase)
-- Grok reads raw GitHub URLs only — no direct DB
-- Antigravity = browser-based Gemini, writes files only
+## Questions for Grok
+
+1. Is this the right trigger layer (PreToolUse Bash keyword match) or is there a better interception point?
+2. Should the gate check for `.gates/GROK_INBOX_READ.md` or should it check for a specific file per session (e.g. `.gates/GROK_INBOX_READ_{date}.md`) so it resets each session?
+3. Any risk of false positives blocking legitimate Bash calls that aren't inference?
+4. Is there a smarter keyword list than: `submit_v, runpod, vast, comfyui, python3 submit, bun run submit`?
+
+---
+
+## Constraints
+- Bash hook only (no new packages, no Python packages beyond stdlib)
 - Mac: Intel i5, 8GB RAM, Monterey 12.7.6
-- No new packages
+- Hook must fail open if gate file check errors
+- Grok reads raw GitHub URLs only
 
----
+## Current hook files for reference
+- `https://raw.githubusercontent.com/rheavoss/work-setup/main/hooks/failure-oracle-inject.py` (inference prompt gate — existing)
+- `https://raw.githubusercontent.com/rheavoss/work-setup/main/hooks/gbrain-post-stop.sh`
 
-## Ask
-1. Read the two live hook files above
-2. Verify each Tiger fix is correct and complete
-3. Check for any new Tigers introduced by the fixes
-4. Green flag = no Launch-Blocking Tigers remain → project closes
-5. Paste response to Claude for QA before anything touches disk
+Green flag = Grok approves design → Claude writes the hook → wires to settings.json.
+Paste response to Claude for QA before anything touches disk.
